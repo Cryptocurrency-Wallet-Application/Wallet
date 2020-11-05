@@ -3,6 +3,7 @@ package com.example.comp491;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
@@ -42,7 +43,18 @@ public class MainPageFragment extends Fragment {
             return;
         }
 
-        //add menu fragment
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        MenuFragment menuFragment = new MenuFragment();
+
+        fragmentTransaction.replace(R.id.fragment_container, menuFragment);
+
+        fragmentTransaction.addToBackStack("MenuFragment");
+
+        fragmentTransaction.commit();
+
 
     }
 
