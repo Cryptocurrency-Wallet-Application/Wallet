@@ -1,15 +1,22 @@
 package com.example.myapplication;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User{
 
     private String userName;
     private String password;
-    private Wallet[] wallets;
+    private List<Wallet> wallets = new ArrayList<Wallet>();
+    private List<Integer> walletAddresses = new ArrayList<Integer>();
 
-    public User(String userName, String password, Wallet[] wallets) {
+    public User(String userName, String password) {
         this.userName = userName;
         this.password = password;
-        this.wallets = wallets;
+    }
+
+    public void addWallet(Wallet w1){
+        this.wallets.add(w1);
     }
 
     public String getUserName() {
@@ -28,13 +35,12 @@ public class User{
         this.password = password;
     }
 
-    public Wallet[] getWallets() {
+    public List<Wallet> getWallets() {
         return wallets;
     }
 
-    public void setWallets(Wallet[] wallets) {
+    public void setWallets(List<Wallet> wallets) {
         this.wallets = wallets;
     }
-
 
 }

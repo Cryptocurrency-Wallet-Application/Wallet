@@ -3,23 +3,18 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class SignUpScreen extends AppCompatActivity {
     private String username;
@@ -27,28 +22,8 @@ public class SignUpScreen extends AppCompatActivity {
     private EditText usernameInput;
     private EditText passwordInput;
     private Button signUpButton;
-    private DatabaseReference reference;
-    private List<User> users = new ArrayList<User>();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public void getUsers(){
-        reference = FirebaseDatabase.getInstance().getReference().child("Users");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Iterator<DataSnapshot> items = snapshot.getChildren().iterator();
-                while(items.hasNext()){
-                    DataSnapshot item = items.next();
-                    String name = item.child("userName").getValue().toString();
-                    String password = item.child("password").getValue().toString();
-                    User temp = new User(name, password, null);
-                    users.add(temp);
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,28 +32,32 @@ public class SignUpScreen extends AppCompatActivity {
         usernameInput = (EditText) findViewById(R.id.usernameInput);
         passwordInput = (EditText) findViewById(R.id.passwordInput);
         signUpButton = (Button) findViewById(R.id.signupButton);
-        reference = FirebaseDatabase.getInstance().getReference().child("Users");
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getUsers();
                 username = usernameInput.getText().toString();
                 password = passwordInput.getText().toString();
-                User user = new User(username, password, null);
-                Boolean isTaken = false;
-                for(User u : users){
-                    if(u.getUserName().equals(username)){
-                        isTaken = true;
+                Wallet initialWallet = new Wallet("a",0,0,0,0,0);
+                User user = new User(username, password);
+                user.addWallet(initialWallet);
+                DocumentReference tempref = db.collection("Users").document(user.getUserName());
+                tempref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if(documentSnapshot.exists()){
+                            Toast.makeText(SignUpScreen.this,"The username is taken, pick another username.", Toast.LENGTH_SHORT).show();
+                        }else{
+                            db.collection("Users").document(user.getUserName()).set(user);
+                            Toast.makeText(SignUpScreen.this,"User created successfully.", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-                if(isTaken){
-                    Toast.makeText(SignUpScreen.this,"Username already taken, choose a different one",Toast.LENGTH_SHORT).show();
-                }else{
-                    reference.push().setValue(user);
-                    Toast.makeText(SignUpScreen.this,"New User Created Successfully",Toast.LENGTH_SHORT).show();
-                }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
             }
         });
     }
-
 }
