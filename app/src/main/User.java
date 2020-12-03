@@ -7,17 +7,16 @@ public class User{
 
     private String userName;
     private String password;
-    private List<Wallet> wallets = new ArrayList<Wallet>();
-    private List<Integer> walletAddresses = new ArrayList<Integer>();
+    private List<String> walletAddresses = new ArrayList<String>();
+    private int walletAmount;
+
 
     public User(String userName, String password) {
         this.userName = userName;
         this.password = password;
     }
 
-    public void addWallet(Wallet w1){
-        this.wallets.add(w1);
-    }
+
 
     public String getUserName() {
         return userName;
@@ -35,12 +34,23 @@ public class User{
         this.password = password;
     }
 
-    public List<Wallet> getWallets() {
-        return wallets;
+    public List<String> getWalletAddresses() {
+        return walletAddresses;
     }
 
-    public void setWallets(List<Wallet> wallets) {
-        this.wallets = wallets;
+    public void setWalletAddresses(List<String> walletAddresses) {
+        this.walletAddresses = walletAddresses;
     }
 
+    public void addWalletAdress(String address){
+        this.walletAddresses.add(address);
+    }
+
+    public int getWalletAmount() {
+        return this.walletAddresses.size();
+    }
+
+    public void setWalletAmount(int walletAmount) {
+        this.walletAmount = walletAmount;
+    }
 }
