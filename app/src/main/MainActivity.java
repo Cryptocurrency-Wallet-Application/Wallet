@@ -1,83 +1,101 @@
 package com.example.myapplication;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.ButtonBarLayout;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Toolbar toolbar;
+    private ProgressBar progressBar;
+    private EditText email;
+    private EditText password;
     private Button login;
     private Button signup;
-    private EditText loginUserNameInput;
-    private EditText loginPasswordInput;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private Button forgotPass;
+    private FirebaseAuth firebaseAuth;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        login = (Button) findViewById(R.id.button);
+        toolbar = findViewById(R.id.toolbar2);
+        progressBar = findViewById(R.id.progressBar);
+        email = findViewById(R.id.userEmail);
+        password = findViewById(R.id.userPassword);
+        login = findViewById(R.id.btnUserLogin);
+        signup = findViewById(R.id.btnUSignup);
+        forgotPass = findViewById(R.id.btnForgotPassword);
+        toolbar.setTitle(R.string.app_name);
+        firebaseAuth = FirebaseAuth.getInstance();
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Boolean checker = false;
-                loginUserNameInput = (EditText) findViewById(R.id.loginUsernameInput);
-                loginPasswordInput = (EditText) findViewById(R.id.loginPasswordInput);
-                String username = loginUserNameInput.getText().toString();
-                String password = loginPasswordInput.getText().toString();
-                DocumentReference tempref = db.collection("Users").document(username);
-                tempref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if(documentSnapshot.exists()){
-                            if(documentSnapshot.get("password").equals(password)){
-                                openAccountScreen();
-                            }else{
-                                Toast.makeText(MainActivity.this,"Username or password is incorrect.", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.VISIBLE);
+                firebaseAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                progressBar.setVisibility(View.GONE);
+                                if (task.isSuccessful()) {
+                                    if(firebaseAuth.getCurrentUser().isEmailVerified()) {
+                                        openAccountScreen();
+                                    } else {
+                                        toastAsync("Please verify your email address.");
+                                    }
+                                } else {
+                                    Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                }
                             }
-                        }else{
-                            Toast.makeText(MainActivity.this,"Username or password is incorrect.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                });
+                        });
             }
         });
-        signup = (Button) findViewById(R.id.button2);
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openSignupScreen();
             }
         });
+        forgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ForgotPasswordActivity.class));
+            }
+        });
     }
     public void openAccountScreen() {
-        Intent intent = new Intent(this, AccountScreen.class);
+        Intent intent = new Intent(MainActivity.this, AccountScreen.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        String username = email.getText().toString();
+        String passwordd = password.getText().toString();
+        intent.putExtra("Username", username);
+        intent.putExtra("password", passwordd);
         startActivity(intent);
     }
     public void openSignupScreen() {
         Intent intent = new Intent(this, SignUpScreen.class);
         startActivity(intent);
+    }
+    public void toastAsync(String message) {
+        runOnUiThread(() -> {
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        });
     }
 }
