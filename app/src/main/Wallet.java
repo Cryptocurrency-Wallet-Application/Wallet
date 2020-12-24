@@ -3,21 +3,16 @@ package com.example.myapplication;
 public class Wallet {
 
     private String walletAddress;
-    private double Ethereum;
-    private double Tether;
-    private double Link;
-    private double TL;
-    private double Euro;
-    private double Dollar;
+    private String password;
+    private String walletDirectory;
+    private String walletName;
 
-    public Wallet(String walletAddress, double ethereum, double tether, double link, double TL, double euro, double dollar) {
+
+    public Wallet(String walletAddress, String password, String walletDirectory, String walletName) {
         this.walletAddress = walletAddress;
-        this.Ethereum = ethereum;
-        this.Tether = tether;
-        this.Link = link;
-        this.TL = TL;
-        this.Euro = euro;
-        this.Dollar = dollar;
+        this.password = password;
+        this.walletDirectory = walletDirectory;
+        this.walletName = walletName;
     }
 
     public String getWalletAddress() {
@@ -28,53 +23,27 @@ public class Wallet {
         this.walletAddress = walletAddress;
     }
 
-    public double getEthereum() {
-        return Ethereum;
+    public String getPassword() {
+        return password;
     }
 
-    public void setEthereum(double ethereum) {
-        Ethereum = ethereum;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public double getTether() {
-        return Tether;
+    public String getWalletDirectory() {
+        return walletDirectory;
     }
 
-    public void setTether(double tether) {
-        Tether = tether;
+    public void setWalletDirectory(String walletDirectory) {
+        this.walletDirectory = walletDirectory;
     }
 
-    public double getLink() {
-        return Link;
+    public String getWalletName() {
+        return walletName;
     }
 
-    public void setLink(double link) {
-        Link = link;
+    public void setWalletName(String walletName) {
+        this.walletName = walletName;
     }
-
-    public double getTL() {
-        return TL;
-    }
-
-    public void setTL(double TL) {
-        this.TL = TL;
-    }
-
-    public double getEuro() {
-        return Euro;
-    }
-
-    public void setEuro(double euro) {
-        Euro = euro;
-    }
-
-    public double getDollar() {
-        return Dollar;
-    }
-
-    public void setDollar(double dollar) {
-        Dollar = dollar;
-    }
-
-
 }

@@ -29,9 +29,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Source;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.http.HttpService;
@@ -39,38 +42,41 @@ import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.security.Provider;
 import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class AccountScreen extends AppCompatActivity {
     private String userName;
     private String password;
     private File walletDir;
-    private Web3j web3j;
+    private Web3j web3j = Web3j.build(new HttpService("https://ropsten.infura.io/v3/37132f5960df4aca855ab542d74d9f91")) ;
     private Button createWallet;
     private Button toWalletAddressesScreen;
+    private Button toImportWalletScreen;
     private ArrayList<String> userWalletAddresses = new ArrayList<String>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Button logout;
     private FirebaseAuth firebaseAuth;
+    private ArrayList<BigDecimal> balances = new ArrayList<BigDecimal>();
+    private AnyChartView anyChartView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_screen);
-        anyChartView = findViewById(R.id.any_chart_view);
-        setupPieChart();
-        String username = this.getIntent().getStringExtra("Username");
+        this.userName = this.getIntent().getStringExtra("Username");
         this.password = this.getIntent().getStringExtra("password");
-        this.setUserName(username);
-        getUserWalletAddresses();
-        //////////////////////////////////////////////
+        this.getUserWalletAddresses();
         setupBouncyCastle();
         testnetBlockchainConnectionTest();
-        //////////////////////////////////////////////
+        anyChartView = findViewById(R.id.any_chart_view);
+        setupPieChart();
         createWallet = (Button) findViewById(R.id.button3);
         createWallet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,9 +100,23 @@ public class AccountScreen extends AppCompatActivity {
                 startActivity(new Intent(AccountScreen.this, MainActivity.class));
             }
         });
+        toImportWalletScreen = findViewById(R.id.button10);
+        toImportWalletScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openImportWalletScreen();
+            }
+        });
     }
     public void openWalletAddressesScreen(){
         Intent intent = new Intent(this, WalletAddressesScreen.class);
+        intent.putExtra("Username", userName);
+        intent.putExtra("password", password);
+        intent.putStringArrayListExtra("walletAddresses", userWalletAddresses);
+        startActivity(intent);
+    }
+    public void openImportWalletScreen(){
+        Intent intent = new Intent(this, ImportWalletScreen.class);
         intent.putExtra("Username", userName);
         intent.putExtra("password", password);
         intent.putStringArrayListExtra("walletAddresses", userWalletAddresses);
@@ -120,7 +140,7 @@ public class AccountScreen extends AppCompatActivity {
         });
     }
     public void testnetBlockchainConnectionTest(){
-        web3j = Web3j.build(new HttpService("https://rinkeby.infura.io/v3/37132f5960df4aca855ab542d74d9f91"));
+        web3j = Web3j.build(new HttpService("https://ropsten.infura.io/v3/37132f5960df4aca855ab542d74d9f91"));
         try {
             Web3ClientVersion clientVersion = web3j.web3ClientVersion().sendAsync().get();
             if(!clientVersion.hasError()){
@@ -143,7 +163,7 @@ public class AccountScreen extends AppCompatActivity {
             ////// wallet generated
             Credentials credentials = WalletUtils.loadCredentials(password, walletDirectory + "/" + walletName);
             String walletAddress = credentials.getAddress();
-            Wallet createdWallet = new Wallet(walletAddress,0,0,0,0,0,0);
+            Wallet createdWallet = new Wallet(walletAddress, password, walletDirectory, walletName);
             db.collection("Wallets").document(walletAddress).set(createdWallet);
             ///// wallet with address written to the database
             User tempUser = new User(userName, password);
@@ -175,7 +195,6 @@ public class AccountScreen extends AppCompatActivity {
         Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME);
         Security.insertProviderAt(new BouncyCastleProvider(), 1);
     }
-    //////////////////////////////////////////////////
     public String getUserName() {
         return userName;
     }
@@ -191,18 +210,35 @@ public class AccountScreen extends AppCompatActivity {
     public void setPassword(String password) {
         this.password = password;
     }
-    AnyChartView anyChartView;
-    String[] wallets = {"Wallet1", "Wallet2", "Wallet3", "Wallet4", "Wallet5"};
-    int[] amount = {5, 5, 5, 5, 5};
+
 
     public void setupPieChart() {
         Pie pie = AnyChart.pie();
         List<DataEntry> dataEntries = new ArrayList<>();
-
-        for(int i =0; i<wallets.length; i++) {
-            dataEntries.add(new ValueDataEntry(wallets[i], amount[i]));
-        }
-        pie.data(dataEntries);
-        anyChartView.setChart(pie);
+        db.collection("Users").document(userName).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    if(document.exists()){
+                        ArrayList<String> addresses = (ArrayList<String>) document.get("walletAddresses");
+                        for (String s : addresses){
+                            EthGetBalance ethGetBalance = null;
+                            try {
+                                ethGetBalance = web3j.ethGetBalance(s.toString(), DefaultBlockParameterName.LATEST).sendAsync().get();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            }
+                            BigDecimal q = Convert.fromWei(ethGetBalance.getBalance().toString(), Convert.Unit.ETHER);
+                            dataEntries.add(new ValueDataEntry(s,q));
+                        }
+                        pie.data(dataEntries);
+                        anyChartView.setChart(pie);
+                    }
+                }
+            }
+        });
     }
 }
