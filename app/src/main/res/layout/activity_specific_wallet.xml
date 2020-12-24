@@ -1,173 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SpecificWallet">
+    tools:context=".SpecificWallet"
+    android:orientation="vertical"
+    android:background="@drawable/main_background">
 
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="182dp"
-        android:layout_height="47dp"
-        android:layout_marginBottom="28dp"
-        android:text="SEND CURRENCY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button6"
-        app:layout_constraintHorizontal_bias="0.34"
-        app:layout_constraintStart_toStartOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3">
 
-    <Button
-        android:id="@+id/button6"
-        android:layout_width="182dp"
-        android:layout_height="47dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="28dp"
-        android:text="CONVERT CURRENCY"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/male_avatar"
+            android:layout_weight="2"
+            android:padding="15dp"
+            />
 
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="228dp"
-        android:layout_height="61dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="28dp"
-        android:text="0x54ef82471d6271998612df3e891b23b2d19ebc40"
-        android:textSize="18sp"
-        android:textStyle="bold|italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Addr"
+            android:textSize="18sp"
+            android:textStyle="bold|italic"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:padding="10dp"/>
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView17"
-        android:layout_width="235dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="52dp"
-        android:text="ETHEREUM (ETH) : 0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="15dp"
+        >
 
-    <TextView
-        android:id="@+id/textView22"
-        android:layout_width="235dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="12dp"
-        android:text="TURKISH LIRA (TL) : 0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView8"
-        app:layout_constraintTop_toBottomOf="@+id/textView21" />
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ETH: 0"
+            android:textSize="14dp"
+            android:textColor="#071357"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
 
-    <TextView
-        android:id="@+id/textView19"
-        android:layout_width="235dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="8dp"
-        android:text="CHAINLINK (LINK) : 0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toBottomOf="@+id/textView18" />
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="USDT:0"
+            android:textSize="14dp"
+            android:textColor="#071357"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
 
-    <TextView
-        android:id="@+id/textView20"
-        android:layout_width="235dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="24dp"
-        android:text="DOLLAR (USD) : 0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView6"
-        app:layout_constraintTop_toBottomOf="@+id/textView19" />
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LINK:0"
+            android:textSize="14dp"
+            android:textColor="#071357"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
 
-    <TextView
-        android:id="@+id/textView21"
-        android:layout_width="235dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="20dp"
-        android:text="EURO (EUR) : 0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView7"
-        app:layout_constraintTop_toBottomOf="@+id/textView20" />
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EQUIVALENT TO"
+            android:textStyle="bold"
+            android:textSize="16dp"
+            android:textColor="#071357"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
 
-    <TextView
-        android:id="@+id/textView18"
-        android:layout_width="235dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="12dp"
-        android:text="TETHER (USDT) : 0 "
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
-        app:layout_constraintTop_toBottomOf="@+id/textView17" />
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DOLLAR: 0"
+            android:textSize="14dp"
+            android:textColor="#071357"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="66dp"
-        android:layout_height="66dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:srcCompat="@drawable/ether" />
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EURO: 0"
+            android:textSize="14dp"
+            android:textColor="#071357"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
 
-    <ImageView
-        android:id="@+id/imageView8"
-        android:layout_width="66dp"
-        android:layout_height="66dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView7"
-        app:srcCompat="@drawable/tl" />
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TL: 0"
+            android:textSize="14dp"
+            android:textColor="#071357"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
 
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="66dp"
-        android:layout_height="66dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6"
-        app:srcCompat="@drawable/euro" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingTop="15dp"
+            >
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="66dp"
-        android:layout_height="66dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
-        app:srcCompat="@drawable/link" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:gravity="center">
 
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="66dp"
-        android:layout_height="66dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4"
-        app:srcCompat="@drawable/dolar" />
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SEND"
+                    android:textColor="#071357"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="66dp"
-        android:layout_height="66dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:srcCompat="@drawable/tether" />
+                <Button
+                    android:id="@+id/send_eth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="ETH"
+                    android:background="@drawable/menu_button"
+                    android:textColor="#071357" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="100dp"
-        android:layout_height="106dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toStartOf="@+id/textView9"
-        app:layout_constraintHorizontal_bias="0.342"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/male_avatar" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <Button
+                    android:id="@+id/sendh_usdt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="USDT"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/menu_button"
+                    android:textColor="#071357" />
+
+                <Button
+                    android:id="@+id/send_link"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="LINK"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/menu_button"
+                    android:textColor="#071357"  />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:gravity="center"
+                >
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CONVERT"
+                    android:textColor="#071357"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    />
+
+
+
+                <Button
+                    android:id="@+id/convert_eth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ETH"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/menu_button"
+                    android:textColor="#071357" />
+
+
+
+                <Button
+                    android:id="@+id/convert_usdt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="USDT"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/menu_button"
+                    android:textColor="#071357" />
+
+
+
+                <Button
+                    android:id="@+id/convert_link"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="LINK"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/menu_button"
+                    android:textColor="#071357" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AccountScreen">
+    tools:context=".AccountScreen"
+    android:background="@drawable/main_background"
+    >
 
     <TextView
         android:id="@+id/textView8"
@@ -23,8 +25,12 @@
         android:layout_height="397dp"
         app:layout_constraintBottom_toTopOf="@+id/button3"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.586"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/textView8"
+        app:layout_constraintVertical_bias="0.104"
+        android:background="@drawable/main_background"
+        />
 
     <Button
         android:id="@+id/button3"
@@ -32,19 +38,11 @@
         android:layout_height="47dp"
         android:text="CREATE WALLET"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/button5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="151dp"
-        android:layout_height="47dp"
-        android:text="DELETE WALLET"
-        android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/button10"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/menu_button"
+        />
 
     <Button
         android:id="@+id/button10"
@@ -54,7 +52,9 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/button11"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/menu_button"
+        />
 
     <Button
         android:id="@+id/button11"
@@ -64,7 +64,9 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/menu_button"
+        />
 
     <Button
         android:id="@+id/buttonLogout"
@@ -74,6 +76,8 @@
         android:layout_marginBottom="16dp"
         android:text="LOGOUT"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/menu_button"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
